@@ -21,13 +21,13 @@ With Maven
 <dependency>
   <groupId>com.github.couchbaselabs</groupId>
   <artifactId>couchversion</artifactId>
-  <version>XXXX</version>
+  <version>0.5</version>
 </dependency>
 ```
 With Gradle
 ```groovy
 compile 'org.javassist:javassist:3.18.2-GA' // workaround for ${javassist.version} placeholder issue*
-compile 'com.github.couchversion:couchversion:XXX'
+compile 'com.github.couchversion:couchversion:0.5'
 ```
 
 ## Usage with Spring
