@@ -305,25 +305,30 @@ public class CouchVersion implements InitializingBean {
   }
 
   private void executeMethod(Method changesetMethod, Object changelogInstance, ChangeEntry entry) throws CouchVersionException {
-    for (int i = 0; i < (entry.getRetries()+1); i++) {
+    if(entry.getRetries() == 0) {
+
       try {
-
         executeChangeSetMethod(changesetMethod, changelogInstance);
-
-      } catch(CouchVersionCounterException e) {
-        //if is the last retry throw the exception
-        if (i == entry.getRetries()) {
-          throw new CouchVersionException("All retries have failed for changeSet " + entry.getChangeId(), e);
-        } else {
-          logger.warn("All recounts have failed, retrying to execute changeSet " + entry.getChangeId());
-        }
 
       } catch (IllegalAccessException e) {
         throw new CouchVersionException(e.getMessage(), e);
-
       } catch (InvocationTargetException e) {
         Throwable targetException = e.getTargetException();
         throw new CouchVersionException(targetException.getMessage(), e);
+      }
+    } else {
+      for (int i = 0; i < entry.getRetries(); i++) {
+        try {
+          executeChangeSetMethod(changesetMethod, changelogInstance);
+        } catch (Exception e) {
+          //if is the last retry throw the exception
+          if (i+1 == entry.getRetries()) {
+            throw new CouchVersionException("All retries have failed for changeSet " + entry.getChangeId(), e);
+          } else {
+            e.printStackTrace();
+            logger.warn("Retrying to execute changeSet " + entry.getChangeId());
+          }
+        }
       }
     }
   }

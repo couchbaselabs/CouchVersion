@@ -21,13 +21,13 @@ With Maven
 <dependency>
   <groupId>com.github.couchbaselabs</groupId>
   <artifactId>couchversion</artifactId>
-  <version>0.1</version>
+  <version>XXXX</version>
 </dependency>
 ```
 With Gradle
 ```groovy
 compile 'org.javassist:javassist:3.18.2-GA' // workaround for ${javassist.version} placeholder issue*
-compile 'com.github.couchversion:couchversion:0.1'
+compile 'com.github.couchversion:couchversion:XXX'
 ```
 
 ## Usage with Spring
@@ -49,6 +49,72 @@ public CouchVersion couchversion(){
   
   return runner;
 }
+```
+
+For the case above, the following properties will be loaded from your **application.properties** file:
+
+```properties
+spring.couchbase.connection=
+spring.couchbase.user=
+spring.couchbase.password=
+spring.couchbase.bucket=
+```
+
+With **Spring Data Couchbase 4** you can also reuse your class that extends *AbstractCouchbaseConfiguration* (used to connect with Couchbase) to configure CouchVersion:
+
+```java
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
+
+@Configuration
+public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
+
+
+    @Override
+    public String getConnectionString() {
+        return "couchbase://127.0.0.1";
+    }
+
+    @Override
+    public String getUserName() {
+        return "Administrator";
+    }
+
+    @Override
+    public String getPassword() {
+        return "password";
+    }
+
+    @Override
+    public String getBucketName() {
+        return "default";
+    }
+
+}
+
+```
+and then:
+
+```java
+
+    @Autowired
+    private CouchbaseConfig couchbaseConfig;
+
+    @Autowired
+	private ApplicationContext context;
+    
+	@Bean
+	public CouchVersion couchVersions(){
+		CouchVersion runner = new CouchVersion(couchbaseConfig.getConnectionString(),
+				couchbaseConfig.getBucketName(), couchbaseConfig.getUserName(), couchbaseConfig.getPassword());
+		//if you don't set the application context, your migrations can't be autowired
+		runner.setApplicationContext(context);
+		runner.setChangeLogsScanPackage(
+				"com.cb.springdata.sample.migration"); // the package to be scanned for changesets
+		return runner;
+	}
+
+
 ```
 
 
