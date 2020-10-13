@@ -15,7 +15,7 @@
 
   <groupId>com.github.couchbaselabs</groupId>
   <artifactId>couchversion</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1</version>
 
   <licenses>
     <license>
@@ -29,7 +29,7 @@
     <connection>scm:git:git@github.com:couchbaselabs/CouchVersion.git</connection>
     <developerConnection>scm:git:git@github.com:couchbaselabs/CouchVersion.git</developerConnection>
     <url>git@github.com:couchbaselabs/CouchVersion.git</url>
-    <tag>couchversion-0.0.1</tag>
+    <tag>couchversion-0.1</tag>
   </scm>
 
   <developers>
@@ -152,41 +152,41 @@
           </execution>
         </executions>
       </plugin>
-<!--      <plugin>-->
-<!--        <groupId>org.apache.maven.plugins</groupId>-->
-<!--        <artifactId>maven-gpg-plugin</artifactId>-->
-<!--        <version>1.6</version>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <id>sign-artifacts</id>-->
-<!--            <phase>verify</phase>-->
-<!--            <goals>-->
-<!--              <goal>sign</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--      </plugin>-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.0.1</version>
-        <configuration>
-          <quiet>true</quiet>
-          <nonavbar>true</nonavbar>
-          <notree>true</notree>
-          <nocomment>true</nocomment>
-          <nohelp>true</nohelp>
-
-        </configuration>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.6</version>
         <executions>
           <execution>
-            <id>attach-javadocs</id>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
             <goals>
-              <goal>jar</goal>
+              <goal>sign</goal>
             </goals>
           </execution>
         </executions>
       </plugin>
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-javadoc-plugin</artifactId>-->
+<!--        <version>3.0.1</version>-->
+<!--        <configuration>-->
+<!--          <quiet>true</quiet>-->
+<!--          <nonavbar>true</nonavbar>-->
+<!--          <notree>true</notree>-->
+<!--          <nocomment>true</nocomment>-->
+<!--          <nohelp>true</nohelp>-->
+
+<!--        </configuration>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <id>attach-javadocs</id>-->
+<!--            <goals>-->
+<!--              <goal>jar</goal>-->
+<!--            </goals>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
