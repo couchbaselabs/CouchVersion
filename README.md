@@ -2,7 +2,7 @@
 
 
 **CouchVersion** is a Java framework which helps you to *manage changes* in your Couchbase and *synchronize* them with your application.
-The concept is very similar to other db migration tools such as [Liquibase](http://www.liquibase.org) or [Flyway](http://flywaydb.org) but *without using XML/JSON/YML files*.
+The concept is very similar to other db migration tools such as Liquibase or [Flyway](http://flywaydb.org) but *without using XML/JSON/YML files*.
 
 CouchVersion provides new approach for adding changes (change sets) based on Java classes and methods with appropriate annotations.
 
@@ -190,8 +190,6 @@ Method annotated by @ChangeSet is taken and applied to the database. History of 
 Method annotated by `@ChangeSet` can have one of the following definition:
 
 
-##### With Spring
-
 ```java
 
 /**
@@ -208,20 +206,18 @@ public class Migration1 {
     private UserRepository userRepository;
 
     @ChangeSet(order = "001", id = "someChangeId1", author = "testAuthor")
-    public void importantWorkToDo(Bucket bucket){
+    public void importantWorkToDo(Cluster cluster, Bucket bucket){
         System.out.println("----------Migration1 - Method1");
     }
 
     @ChangeSet(order = "002", id = "someChangeId2", author = "testAuthor")
-    public void method2(Bucket bucket){
+    public void method2(Bucket bucket, Cluster cluster){
         System.out.println("----------Migration1 - Method2");
     }
 
     @ChangeSet(order = "003", id = "someChangeId3", author = "testAuthor")
-    public void method3(Bucket bucket){
+    public void method3(Cluster cluster){
         System.out.println("----------Migration1 - Method3");
-    }
-    }
     }
 
     @ChangeSet(order = "004", id = "someChangeId4", author = "testAuthor")
@@ -229,41 +225,11 @@ public class Migration1 {
         System.out.println("----------Migration1 - Method4");
     }
 
-    @ChangeSet(order = "005", id = "someChangeId5", author = "testAuthor")
+    @ChangeSet(order = "005", id = "someChangeId4", author = "testAuthor")
     public void method5(){
         System.out.println("----------Migration1 - Method5 (The bucket parameter is not necessary here)");
     }
 
-
-    /**
-     * Here is an example of how you can check if your update has run successfully, all you need to do is to
-     * return a ParameterizedN1qlQuery.
-     * @return
-     */
-    @ChangeSet(order = "006", id = "someChangeId6", author = "testAuthor", recounts = "2", retries = "1")
-    public ParameterizedN1qlQuery method6(){
-
-        //adding some data as an example
-        userService.save(new User("someUserIdForTesting", "user1", new Address(), new ArrayList<>(), Arrays.asList("admin", "manager")));
-        Iterable<User> users = userRepository.findAll(new PageRequest(0, 100));//we just care about the first 100 records
-
-        users.forEach( e-> {
-            //rename admin to adm
-             if(e.getSecurityRoles().contains("admin")) {
-                 e.getSecurityRoles().remove("admin");
-                 e.getSecurityRoles().add("adm");
-             }
-            userRepository.save(e);
-        });
-
-        //IMPORTANT: The query MUST have an attribute called *size*
-        String queryString = "Select count(userRole)  as size from test t unnest t.securityRoles as userRole " +
-                " where t._class='com.cb.springdata.sample.entities.User' " +
-                " and userRole = 'admin'";
-        N1qlParams params = N1qlParams.build().consistency(ScanConsistency.REQUEST_PLUS).adhoc(true);
-        ParameterizedN1qlQuery query = N1qlQuery.parameterized(queryString, JsonObject.create(), params);
-        return query;
-    }
 
 }
 
@@ -271,7 +237,9 @@ public class Migration1 {
 ```
 
 
-##### Without Spring
+##### Example
+
+Here is an example of how a real migration could look like:
 
 ```java
 /**
@@ -280,34 +248,42 @@ public class Migration1 {
 @ChangeLog(order = "2")
 public class Migration2 {
 
-    @ChangeSet(order = "1", id = "someChangeId21", author = "testAuthor")
-    public void importantWorkToDo(){
-        System.out.println("----------Migration2 - Method1");
+    @ChangeSet(order = "001", id = "createDummyData", author = "testAuthor")
+    public void createDummyData(Bucket bucket){
+
+        User user1 = new User(UUID.randomUUID().toString(), "Denis", null, null, null, null);
+        userRepository.save(user1);
+
+        User user2 = new User(UUID.randomUUID().toString(), "John", null, null, null, null);
+        userRepository.save(user2);
     }
 
-    @ChangeSet(order = "2", id = "someChangeId22", author = "testAuthor")
-    public void method2(){
-        System.out.println("----------Migration2 - Method2");
+
+    @ChangeSet(order = "002", id = "createPrimaryIndex", author = "testAuthor")
+    public void createInitialIndes(Cluster cluster, Bucket bucket){
+        cluster.queryIndexes().createPrimaryIndex(bucket.name(),
+                CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions().ignoreIfExists(true));
     }
 
-    @ChangeSet(order = "3", id = "someChangeId23", author = "testAuthor")
-    public void method3(){
-        System.out.println("----------Migration2 - Method3");
+    @ChangeSet(order = "003", id = "someBasicIndes", author = "testAuthor")
+    public void createSomeBasicIndes(Cluster cluster, Bucket bucket){
+        cluster.queryIndexes().createIndex(bucket.name(), "nameIndex", Arrays.asList("name"),
+                CreateQueryIndexOptions.createQueryIndexOptions().ignoreIfExists(true));
     }
 
-    @ChangeSet(order = "4", id = "someChangeId24", author = "testAuthor")
-    public void method4(){
-        System.out.println("----------Migration2 - Method4");
+    @ChangeSet(order = "004", id = "userPartialIndex", author = "testAuthor")
+    public void createPartialIndex(Cluster cluster, Bucket bucket ){
+        cluster.query("CREATE INDEX user_idx ON `"+bucket.name()+"`(`_class`, `firstName`) WHERE (`_class` = '"+ User.class.getName()+"')");
     }
 
-    @ChangeSet(order = "5", id = "someChangeId25", author = "testAuthor")
-    public void method5(Bucket bucket){
-        System.out.println("----------Migration2 - Method5");
+    @ChangeSet(order = "005", id = "copyNameToFirstName", author = "testAuthor")
+    public void copyNameToFirstName(Cluster cluster, Bucket bucket){
+        cluster.query("update `"+bucket.name()+"` set firstName = name WHERE (`_class` = '"+ User.class.getName()+"')");
     }
 
-    @ChangeSet(order = "6", id = "someChangeId256", author = "testAuthor", runAlways=true)
-    public void method6(Bucket bucket){
-        System.out.println("----------Migration2 - Method6 - THIS SHOULD ALWAYS RUN "+bucket.name());
+    @ChangeSet(order = "006", id = "deleteUserName", author = "testAuthor")
+    public void deleteUserName(Cluster cluster, Bucket bucket){
+        cluster.query(" UPDATE `"+bucket.name()+"` UNSET name WHERE (`_class` = '"+ User.class.getName()+"')");
     }
 }
 
