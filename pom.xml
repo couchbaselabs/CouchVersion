@@ -15,7 +15,7 @@
 
   <groupId>com.github.couchbaselabs</groupId>
   <artifactId>couchversion</artifactId>
-  <version>0.5-SNAPSHOT</version>
+  <version>0.5</version>
 
   <licenses>
     <license>
@@ -29,7 +29,7 @@
     <connection>scm:git:git@github.com:couchbaselabs/CouchVersion.git</connection>
     <developerConnection>scm:git:git@github.com:couchbaselabs/CouchVersion.git</developerConnection>
     <url>git@github.com:couchbaselabs/CouchVersion.git</url>
-    <tag>couchversion-0.0.1</tag>
+    <tag>couchversion-0.5</tag>
   </scm>
 
   <developers>
