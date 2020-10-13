@@ -88,9 +88,9 @@ public class CouchVersion implements InitializingBean {
   }
 
   /**
-   * Executing migration
-   *
-   * @throws CouchVersionException exception
+   * Execute the migration script, this method should only be called on projects not using spring
+   * @throws CouchVersionException Thrown when an unexpected error occurs
+   * @throws InterruptedException Thrown when the application failed to sleep while waiting for the lock
    */
   public void execute() throws CouchVersionException, InterruptedException {
     if (!isEnabled()) {
@@ -410,6 +410,7 @@ public class CouchVersion implements InitializingBean {
 
   /**
    * Should only be used for testing purposes
+   * @param couchVersionDAO DAO responsible for storing the changesets and locks
    */
   public void setDAO(CouchVersionDAO couchVersionDAO){
     this.dao = couchVersionDAO;
