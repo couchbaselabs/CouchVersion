@@ -14,7 +14,7 @@ You can clone the sample project here https://github.com/deniswsrosa/couchversio
 
 ## Add a dependency
 
-*IMPORTANT:* https://oss.sonatype.org/content/groups/public/com/github/deniswsrosa/couchversion/.
+*IMPORTANT:* https://oss.sonatype.org/content/groups/public/com/github/couchbaselabs/couchversion/
 
 With Maven
 ```xml
@@ -179,9 +179,9 @@ Method annotated by @ChangeSet is taken and applied to the database. History of 
 
 `author` - author of a change set
 
-`runAlways` - _[optional, default: false]_ changeset will always be executed but only first execution event will be stored as a document
+`runAlways` - _[optional, default: false]_ changeset will always be executed but only the first execution event will be stored as a document
 
-`retries` - _[optional, default: 0] [Only applied when changSet returns a ParameterizedN1qlQuery]_ if the recount operation fails (the count result isn't zero) it will rerun the changeSet in an attempt to update the remaining documents ( Your changeSet should me able to run multiple times without any side effects). If all retries fail, an exception will the thrown an the application will fail to start.
+`retries` - _[optional, default: 0]  If by some reason your changeSet throws an exception and you want to retry it instead if failing, you could set here the number of retries you want (Not sure if this feature is useful, let me know if you are using it). If all retries fail, an exception will be thrown an the application will fail to start.
 
 ![CouchVersion](https://raw.githubusercontent.com/deniswsrosa/liquicouch/master/misc/retriesExample.png)
 
@@ -329,6 +329,14 @@ public CouchVersion couchversion() {
   //... etc
 }
 ```
+
+
+## Locks and Race Conditions
+
+**CouchVersion*** has an internal mechanism to avoid race conditions. Before running the migration, the framework will write a document with id **couchversion_lock** in the database to act as a lock.
+Other instances of the application will check this lock before trying to run the migration, and if the lock is present, they will sleep in exponential intervals until it reaches 5 minutes of waiting. After this time, if the lock has not been released yet, the application will fail to start.
+
+Once the migration finishes or fails, the document with id **couchversion_lock** will be removed from the database.
 
 ## Support
 
