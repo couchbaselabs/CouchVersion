@@ -41,7 +41,7 @@ public class CouchVersionDAO {
     List<List<String>> partitions = Partition.ofSize(changeEntries, 50);
 
     for(List<String> partition: partitions) {
-      String query = "select count(*) as val from "+bucket.name()+" USE KEYS ["+
+      String query = "select count(*) as val from `"+bucket.name()+"` USE KEYS ["+
               partition.stream()
                       .map(e-> "'"+e+"'")
                       .collect(Collectors.joining(","))
