@@ -42,8 +42,7 @@ public class CouchVersion implements InitializingBean {
 
 
   public CouchVersion(ApplicationContext context) {
-    this.context = context;
-    this.springEnvironment = context.getEnvironment();
+    setApplicationContext(context);
 
     this.cluster = Cluster.connect(springEnvironment.getProperty("spring.couchbase.connection"),
             springEnvironment.getProperty("spring.couchbase.user"),
@@ -67,7 +66,7 @@ public class CouchVersion implements InitializingBean {
   }
 
   public CouchVersion(ApplicationContext context, String connectionString, String bucketName, String user, String password) {
-    this.context = context;
+    setApplicationContext(context);
     this.cluster = Cluster.connect(connectionString, user, password);
     this.bucket = this.cluster.bucket(bucketName);
     this.dao = new CouchVersionDAO(cluster, bucket);
@@ -75,6 +74,7 @@ public class CouchVersion implements InitializingBean {
 
   public void setApplicationContext(ApplicationContext context) {
     this.context = context;
+    this.springEnvironment = context.getEnvironment();
   }
 
   /**
