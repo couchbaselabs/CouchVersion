@@ -12,6 +12,10 @@ The goal is to keep this tool simple and comfortable to use.
 
 You can clone the sample project here https://github.com/deniswsrosa/CouchVersionDemo
 
+# Release Notes
+
+0.5.1 -> Minor bug fixes
+
 ## Add a dependency
 
 *IMPORTANT:* https://oss.sonatype.org/content/groups/public/com/github/couchbaselabs/couchversion/
@@ -21,7 +25,7 @@ With Maven
 <dependency>
   <groupId>com.github.couchbaselabs</groupId>
   <artifactId>couchversion</artifactId>
-  <version>0.5</version>
+  <version>0.5.1</version>
 </dependency>
 ```
 With Gradle
