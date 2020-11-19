@@ -8,6 +8,9 @@ CouchVersion provides new approach for adding changes (change sets) based on Jav
 
 The goal is to keep this tool simple and comfortable to use.
 
+Watch more about it here: https://share.vidyard.com/watch/98GgKFiyi4tz2WuLQVVfzW
+
+
 # Getting started
 
 You can clone the sample project here https://github.com/deniswsrosa/CouchVersionDemo
