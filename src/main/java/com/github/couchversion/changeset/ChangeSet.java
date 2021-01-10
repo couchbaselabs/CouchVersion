@@ -44,4 +44,11 @@ public @interface ChangeSet {
 
   int retries() default 0;
 
+  /**
+   * Executes the change set after an interruption, such as an application shutdown, or server a crash.
+   * Optional (default is true)
+   * @return should restart after interruption?
+   */
+  boolean restartInterrupted() default true;
+
 }

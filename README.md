@@ -188,7 +188,9 @@ Method annotated by @ChangeSet is taken and applied to the database. History of 
 
 `runAlways` - _[optional, default: false]_ changeset will always be executed but only the first execution event will be stored as a document
 
-`retries` - _[optional, default: 0]  If by some reason your changeSet throws an exception and you want to retry it instead if failing, you could set here the number of retries you want (Not sure if this feature is useful, let me know if you are using it). If all retries fail, an exception will be thrown an the application will fail to start.
+`restartInterrupted` - _[optional, default: true]_ changeset will be executed after an interruption, such as an application shutdown, or server a crash.
+
+`retries` - _[optional, default: 0]  If by some reason your changeSet throws an exception and you want to retry it instead of failing, you could set here the number of retries you want (Not sure if this feature is useful, let me know if you are using it). If all retries fail, an exception will be thrown an the application will fail to start.
 
 ![CouchVersion](https://raw.githubusercontent.com/deniswsrosa/liquicouch/master/misc/retriesExample.png)
 

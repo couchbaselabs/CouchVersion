@@ -60,6 +60,15 @@ public class ChangeService {
     return filteredChangeSets;
   }
 
+  public boolean isRestartInterrupted(Method changesetMethod){
+    if (changesetMethod.isAnnotationPresent(ChangeSet.class)){
+      ChangeSet annotation = changesetMethod.getAnnotation(ChangeSet.class);
+      return annotation.restartInterrupted();
+    } else {
+      return false;
+    }
+  }
+
   public boolean isRunAlwaysChangeSet(Method changesetMethod){
     if (changesetMethod.isAnnotationPresent(ChangeSet.class)){
       ChangeSet annotation = changesetMethod.getAnnotation(ChangeSet.class);
@@ -72,7 +81,7 @@ public class ChangeService {
   public ChangeEntry createChangeEntry(Method changesetMethod){
     if (changesetMethod.isAnnotationPresent(ChangeSet.class)){
       ChangeSet annotation = changesetMethod.getAnnotation(ChangeSet.class);
-  
+
       return new ChangeEntry(
           annotation.id(),
           annotation.author(),
