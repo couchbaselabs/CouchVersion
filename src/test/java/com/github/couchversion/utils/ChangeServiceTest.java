@@ -2,9 +2,7 @@ package com.github.couchversion.utils;
 
 import com.github.couchversion.changeset.ChangeEntry;
 import com.github.couchversion.exception.CouchVersionChangeSetVersionException;
-import com.github.couchversion.test.changelogs.CouchVersionChange2TestResource;
-import com.github.couchversion.test.changelogs.CouchVersionTestResource;
-
+import com.github.couchversion.test.changelogs.*;
 import junit.framework.Assert;
 import org.junit.Test;
 

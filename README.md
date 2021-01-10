@@ -28,7 +28,7 @@ With Maven
 <dependency>
   <groupId>com.github.couchbaselabs</groupId>
   <artifactId>couchversion</artifactId>
-  <version>0.5.2</version>
+  <version>0.5.1</version>
 </dependency>
 ```
 With Gradle

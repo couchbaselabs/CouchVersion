@@ -283,6 +283,7 @@ public class CouchVersion implements InitializingBean {
                 dao.save(changeEntry);
               }
               logger.info(changeEntry + " applied");
+
             } else if (service.isRunAlwaysChangeSet(changesetMethod)) {
               executeMethod(changesetMethod, changelogInstance, changeEntry);
               logger.info(changeEntry + " reapplied");
