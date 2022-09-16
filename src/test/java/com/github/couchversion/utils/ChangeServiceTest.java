@@ -3,13 +3,14 @@ package com.github.couchversion.utils;
 import com.github.couchversion.changeset.ChangeEntry;
 import com.github.couchversion.exception.CouchVersionChangeSetVersionException;
 import com.github.couchversion.test.changelogs.*;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -87,11 +88,11 @@ public class ChangeServiceTest {
       ChangeEntry entry = service.createChangeEntry(foundMethod);
 
       // then
-      Assert.assertEquals("testuser", entry.getAuthor());
-      Assert.assertEquals(CouchVersionTestResource.class.getName(), entry.getChangeLogClass());
-      Assert.assertNotNull(entry.getTimestamp());
-      Assert.assertNotNull(entry.getChangeId());
-      Assert.assertNotNull(entry.getChangeSetMethodName());
+      assertEquals("testuser", entry.getAuthor());
+      assertEquals(CouchVersionTestResource.class.getName(), entry.getChangeLogClass());
+      assertNotNull(entry.getTimestamp());
+      assertNotNull(entry.getChangeId());
+      assertNotNull(entry.getChangeSetMethodName());
     }
   }
 
