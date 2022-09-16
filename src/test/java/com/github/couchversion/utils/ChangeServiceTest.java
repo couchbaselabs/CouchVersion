@@ -3,15 +3,16 @@ package com.github.couchversion.utils;
 import com.github.couchversion.changeset.ChangeEntry;
 import com.github.couchversion.exception.CouchVersionChangeSetVersionException;
 import com.github.couchversion.test.changelogs.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author deniswsrosa
@@ -96,11 +97,11 @@ public class ChangeServiceTest {
     }
   }
 
-  @Test(expected = CouchVersionChangeSetVersionException.class)
+  @Test
   public void shouldFailOnDuplicatedChangeSets() throws CouchVersionChangeSetVersionException {
     String scanPackage = ChangeLogWithDuplicate.class.getPackage().getName();
     ChangeService service = new ChangeService(scanPackage);
-    service.fetchChangeSets(ChangeLogWithDuplicate.class);
+    assertThrows(CouchVersionChangeSetVersionException.class, () -> service.fetchChangeSets(ChangeLogWithDuplicate.class));
   }
 
 }
