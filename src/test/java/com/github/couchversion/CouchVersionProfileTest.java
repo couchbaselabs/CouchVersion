@@ -3,7 +3,6 @@ package com.github.couchversion;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.kv.ExistsResult;
 import com.github.couchversion.changeset.ChangeEntry;
 import com.github.couchversion.dao.BucketWrapper;
 import com.github.couchversion.dao.CouchVersionDAO;
@@ -17,7 +16,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 /**
