@@ -3,14 +3,14 @@ package com.github.couchversion.utils;
 import com.github.couchversion.changeset.ChangeEntry;
 import com.github.couchversion.exception.CouchVersionChangeSetVersionException;
 import com.github.couchversion.test.changelogs.*;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author deniswsrosa
@@ -27,7 +27,7 @@ public class ChangeServiceTest {
     // then
     assertTrue(foundClasses != null && foundClasses.size() > 0);
   }
-  
+
   @Test
   public void shouldFindChangeSetMethods() throws CouchVersionChangeSetVersionException {
     // given
@@ -36,7 +36,7 @@ public class ChangeServiceTest {
 
     // when
     List<Method> foundMethods = service.fetchChangeSets(CouchVersionTestResource.class);
-    
+
     // then
     assertTrue(foundMethods != null && foundMethods.size() == 3);
   }
@@ -75,17 +75,17 @@ public class ChangeServiceTest {
 
   @Test
   public void shouldCreateEntry() throws CouchVersionChangeSetVersionException {
-    
+
     // given
     String scanPackage = CouchVersionTestResource.class.getPackage().getName();
     ChangeService service = new ChangeService(scanPackage);
     List<Method> foundMethods = service.fetchChangeSets(CouchVersionTestResource.class);
 
     for (Method foundMethod : foundMethods) {
-    
+
       // when
       ChangeEntry entry = service.createChangeEntry(foundMethod);
-      
+
       // then
       Assert.assertEquals("testuser", entry.getAuthor());
       Assert.assertEquals(CouchVersionTestResource.class.getName(), entry.getChangeLogClass());
