@@ -320,6 +320,7 @@ public class CouchVersion implements InitializingBean {
       for (int i = 0; i < entry.getRetries(); i++) {
         try {
           executeChangeSetMethod(changesetMethod, changelogInstance);
+          break;
         } catch (Exception e) {
           //if is the last retry throw the exception
           if (i+1 == entry.getRetries()) {
