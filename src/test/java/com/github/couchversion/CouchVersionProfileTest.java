@@ -3,7 +3,6 @@ package com.github.couchversion;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.kv.ExistsResult;
 import com.github.couchversion.changeset.ChangeEntry;
 import com.github.couchversion.dao.BucketWrapper;
 import com.github.couchversion.dao.CouchVersionDAO;
@@ -11,13 +10,14 @@ import com.github.couchversion.resources.EnvironmentMock;
 import com.github.couchversion.test.changelogs.CouchVersionChange2TestResource;
 import com.github.couchversion.test.profiles.def.UnProfiledChangeLog;
 import com.github.couchversion.test.profiles.dev.ProfiledDevChangeLog;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 /**
@@ -25,7 +25,8 @@ import static org.mockito.Mockito.*;
  *
  * @author deniswsrosa
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class CouchVersionProfileTest {
 
   @Mock
@@ -46,7 +47,7 @@ public class CouchVersionProfileTest {
   private CouchVersionDAO dao;
 
 
-  @Before
+  @BeforeEach
   public void init() throws Exception {
     runner = new CouchVersion(cluster, bucket);
     runner.setDAO(dao);
@@ -55,7 +56,7 @@ public class CouchVersionProfileTest {
     when(dao.hasNewChanges(anyList())).thenReturn(true);
     when(dao.getLock(anyLong())).thenReturn(true);
     when(dao.isLocked()).thenReturn(false);
-    when(dao.isNewChange(anyObject())).thenReturn(true);
+    when(dao.isNewChange(any())).thenReturn(true);
 
     when(bucket.defaultCollection()).thenReturn(collection);
   }
