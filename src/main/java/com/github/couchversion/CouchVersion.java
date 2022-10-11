@@ -6,7 +6,6 @@ import com.github.couchversion.changeset.ChangeEntry;
 import com.github.couchversion.dao.CouchVersionDAO;
 import com.github.couchversion.exception.CouchVersionChangeSetVersionException;
 import com.github.couchversion.exception.CouchVersionConfigurationVersionException;
-import com.github.couchversion.exception.CouchVersionCounterException;
 import com.github.couchversion.exception.CouchVersionException;
 import com.github.couchversion.utils.ChangeService;
 import org.slf4j.Logger;
@@ -276,8 +275,13 @@ public class CouchVersion implements InitializingBean {
 
           try {
             if (dao.isNewChange(changeEntry)) {
+              if(!service.isRestartInterrupted(changesetMethod)){
+                dao.save(changeEntry);
+              }
               executeMethod(changesetMethod, changelogInstance, changeEntry);
-              dao.save(changeEntry);
+              if(service.isRestartInterrupted(changesetMethod)){
+                dao.save(changeEntry);
+              }
               logger.info(changeEntry + " applied");
 
             } else if (service.isRunAlwaysChangeSet(changesetMethod)) {

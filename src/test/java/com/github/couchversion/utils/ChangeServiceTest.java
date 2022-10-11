@@ -53,7 +53,7 @@ public class ChangeServiceTest {
     List<Method> foundMethods = service.fetchChangeSets(CouchVersionChange2TestResource.class);
 
     // then
-    assertTrue(foundMethods != null && foundMethods.size() == 3);
+    assertTrue(foundMethods != null && foundMethods.size() == 5);
   }
 
 
@@ -71,6 +71,24 @@ public class ChangeServiceTest {
         assertTrue(service.isRunAlwaysChangeSet(foundMethod));
       } else {
         assertFalse(service.isRunAlwaysChangeSet(foundMethod));
+      }
+    }
+  }
+
+  @Test
+  public void shouldFindIsRestart() throws CouchVersionChangeSetVersionException {
+    // given
+    String scanPackage = CouchVersionTestResource.class.getPackage().getName();
+    ChangeService service = new ChangeService(scanPackage);
+
+    // when
+    List<Method> foundMethods = service.fetchChangeSets(CouchVersionChange2TestResource.class);
+    // then
+    for (Method foundMethod : foundMethods) {
+      if (foundMethod.getName().equals("testChangeSetWithRestartInterrupted")){
+        assertFalse(service.isRestartInterrupted(foundMethod));
+      } else {
+        assertTrue(service.isRestartInterrupted(foundMethod));
       }
     }
   }
