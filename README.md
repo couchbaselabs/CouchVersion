@@ -4,6 +4,10 @@
 **CouchVersion** is a Java framework which helps you to *manage changes* in your Couchbase and *synchronize* them with your application.
 The concept is very similar to other db migration tools such as Liquibase or [Flyway](http://flywaydb.org) but *without using XML/JSON/YML files*.
 
+*Quick Update*
+
+We are testing the support for collections. Expectation is to get a new release by Nov 15th 2022.
+
 CouchVersion provides new approach for adding changes (change sets) based on Java classes and methods with appropriate annotations.
 
 The goal is to keep this tool simple and comfortable to use.
